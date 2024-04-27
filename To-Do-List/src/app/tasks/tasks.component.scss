@@ -1,0 +1,7 @@
+.task-cards{
+    display: flex;
+    flex-direction: column;
+    > .card{
+        margin-top: 10px;
+    }
+}
