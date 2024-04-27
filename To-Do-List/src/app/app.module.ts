@@ -1,18 +1,19 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TasksComponent } from './tasks/tasks.component';
+import { SharedModule } from './shared/shared.module';
+import { EditComponent } from './tasks/components/edit/edit.component';
+import { AddComponent } from './tasks/components/add/add.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TasksComponent,
+    EditComponent,
+    AddComponent,
   ],
-  imports: [
-    BrowserModule,
-    NgbModule,
-    BrowserAnimationsModule
+  imports: [    
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
