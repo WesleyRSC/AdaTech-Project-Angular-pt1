@@ -1,1 +1,9 @@
-<p>header works!</p>
+<header>
+  <div class="header-title">Ada To-Do List Manager</div>
+  <div class="container-fluid">
+    <div class="timer">
+      <span class="date">{{ rxTime | date }}</span>
+      <span class="time">{{ rxTime | date : "HH:mm:ss" }}</span>
+    </div>
+  </div>
+</header>
