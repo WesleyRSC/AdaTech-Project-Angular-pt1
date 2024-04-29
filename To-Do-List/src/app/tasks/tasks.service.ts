@@ -24,7 +24,9 @@ export class TasksService {
   }
 
   editTask(task: Task): Observable<any> {
-    return this.httpClient.put(`${this.apiUrl}/${task._id}`, task);
+    let id = task._id;
+    let taskAux = { ...task, _id: undefined };
+    return this.httpClient.put(`${this.apiUrl}/${id}`, taskAux);
   }
 
   removeTask(id: string): Observable<any> {
