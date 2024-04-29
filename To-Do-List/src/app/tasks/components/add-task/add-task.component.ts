@@ -21,6 +21,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 })
 export class AddTaskComponent implements OnInit, OnDestroy {
   @Output() newTaskEvent = new EventEmitter<Task>();
+  @Output() closeEvent = new EventEmitter();
 
   newTaskForm: FormGroup;
 
@@ -38,13 +39,24 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   addNewTask() {
+
+    console.log(this.newTaskForm.value.date)
     if (!this.newTaskForm.valid) {
       alert('Incorrect Data');
+      return;
+    }
+    if (this.newTaskForm.value.date.getDate() < new Date().getDate()) {
+      console.log(this.newTaskForm.value.date)
+      alert('Date cannot be less than the current date');
       return;
     }
 
     let newTask: Task = this.newTaskForm.getRawValue();
 
     this.newTaskEvent.emit(newTask);
+  }
+
+  closeModal() {
+    this.closeEvent.emit();
   }
 }
