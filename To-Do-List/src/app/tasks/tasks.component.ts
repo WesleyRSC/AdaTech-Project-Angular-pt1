@@ -9,6 +9,15 @@ import { Task } from './interfaces/task';
 })
 export class TasksComponent implements OnInit {
   tasks: Array<Task> = [];
+  newTask: Task = {
+    _id: undefined,
+    title: '',
+    description: '',
+    date: new Date(),
+    durationTime: { hours: 0, minutes: 0 },
+  };
+  currentTask: Task | null = null;
+
   constructor(private taskService: TasksService) {}
 
   ngOnInit(): void {
@@ -18,7 +27,6 @@ export class TasksComponent implements OnInit {
   getTasks() {
     this.taskService.getTasks().subscribe({
       next: (result) => {
-        console.log(result);
         this.tasks = result;
       },
       error: (err) => {
@@ -28,15 +36,19 @@ export class TasksComponent implements OnInit {
   }
 
   addTask() {
-    let task: Task = {
-      title: 'Tomar Remédio',
-      description: 'dipirona 20ml',
-      date: new Date(),
-      _id: undefined
-    };
-    this.taskService.addTask(task).subscribe({
+    if (!this.newTask.title.trim()) {
+      return;
+    }
+    this.taskService.addTask(this.newTask).subscribe({
       next: (result) => {
-        this.getTasks();
+        this.tasks.push(result);
+        this.newTask = {
+          _id: undefined,
+          title: '',
+          description: '',
+          date: new Date(),
+          durationTime: { hours: 0, minutes: 0 },
+        };
       },
       error: (err) => {
         alert(err.error);
@@ -44,15 +56,41 @@ export class TasksComponent implements OnInit {
     });
   }
 
-  removeTask(task: Task) {
-    console.log(task);
-    this.taskService.removeTask(task._id!).subscribe({
-      next: (result) => {
-        this.getTasks();
-      },
-      error: (err) => {
-        alert(err.error);
-      },
+  selectTask(task: Task) {
+    this.currentTask = { ...task };
+  }
+
+  clearSelection() {
+    this.currentTask = null;
+  }
+
+  updateTask() {
+    if (!this.currentTask) {
+      return;
+    }
+    this.taskService.editTask(this.currentTask).subscribe(() => {
+      const index = this.tasks.findIndex(
+        (task) => task._id === this.currentTask!._id
+      );
+      if (index !== -1) {
+        this.tasks[index] = { ...this.currentTask! };
+      }
+      this.currentTask = null;
     });
+  }
+
+  removeTask(_id: string | undefined) {
+    if (_id) {
+      this.taskService.removeTask(_id).subscribe({
+        next: (result) => {
+          this.tasks = this.tasks.filter((task) => task._id !== _id);
+        },
+        error: (err) => {
+          alert(err.error);
+        },
+      });
+    } else {
+      console.error('ID da tarefa é indefinido.');
+    }
   }
 }

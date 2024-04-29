@@ -1,5 +1,5 @@
 <section class="container-fluid">
-    <button mat-mini-fab class="success-button" (click)="addTask()"><mat-icon>add</mat-icon></button>
+  <button mat-mini-fab class="success-button" (click)="addTask()"><mat-icon>add</mat-icon></button>
   <article class="task-cards">
     <mat-card class="card" *ngFor="let task of tasks">
       <mat-card-header>
@@ -10,8 +10,16 @@
         <span>Date: {{ task.date | date : "dd/MM/YYYY HH:mm" }}</span>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-button color="warn" (click)="removeTask(task)">Remove</button>
+        <button mat-button color="primary" (click)="selectTask(task)">Edit</button>
+        <button mat-button color="warn" (click)="removeTask(task._id)">Remove</button>
       </mat-card-actions>
     </mat-card>
   </article>
+  <div *ngIf="currentTask">
+    <h3>Edit Task</h3>
+    <input type="text" [(ngModel)]="currentTask.title">
+    <textarea [(ngModel)]="currentTask.description"></textarea>
+    <button mat-raised-button color="primary" (click)="updateTask()">Save</button>
+    <button mat-raised-button (click)="clearSelection()">Cancel</button>
+  </div>
 </section>
