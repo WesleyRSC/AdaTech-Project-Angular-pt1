@@ -20,11 +20,16 @@ export class TasksComponent implements OnInit {
     this.getTasks();
   }
 
+  compareTasks = (a: Task, b: Task): number => {
+    let auxA = new Date(a.date).getDate();
+    let auxB = new Date(b.date).getDate();
+    return auxA - auxB;
+  };
+
   getTasks() {
     this.taskService.getTasks().subscribe({
       next: (result) => {
-        console.log(result);
-        this.tasks = result;
+        this.tasks = result.sort((a, b) => this.compareTasks(a, b));
       },
       error: (err) => {
         alert(err.error);
@@ -56,7 +61,7 @@ export class TasksComponent implements OnInit {
   }
 
   openEditModal(task: Task) {
-    this.selectedTask=task
+    this.selectedTask = task;
     this.showEditModal = true;
   }
 
@@ -67,7 +72,7 @@ export class TasksComponent implements OnInit {
         this.getTasks();
       },
       error: (err) => {
-        console.log(err)
+        console.log(err);
         alert(err.error);
       },
     });
