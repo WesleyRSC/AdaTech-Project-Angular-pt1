@@ -10,6 +10,9 @@ import { Task } from './interfaces/task';
 export class TasksComponent implements OnInit {
   tasks: Array<Task> = [];
   showAddModal: boolean = false;
+  showEditModal: boolean = false;
+
+  selectedTask: Task | null = null;
 
   constructor(private taskService: TasksService) {}
 
@@ -29,11 +32,10 @@ export class TasksComponent implements OnInit {
     });
   }
 
-  addTask(newTask:Task) {
-    this.showAddModal = false;
-  
+  addTask(newTask: Task) {
     this.taskService.addTask(newTask).subscribe({
       next: (result) => {
+        this.showAddModal = false;
         this.getTasks();
       },
       error: (err) => {
@@ -43,12 +45,29 @@ export class TasksComponent implements OnInit {
   }
 
   removeTask(task: Task) {
-    console.log(task);
     this.taskService.removeTask(task._id!).subscribe({
       next: (result) => {
         this.getTasks();
       },
       error: (err) => {
+        alert(err.error);
+      },
+    });
+  }
+
+  openEditModal(task: Task) {
+    this.selectedTask=task
+    this.showEditModal = true;
+  }
+
+  updateTask(task: Task) {
+    this.taskService.editTask(task).subscribe({
+      next: (result) => {
+        this.showEditModal = false;
+        this.getTasks();
+      },
+      error: (err) => {
+        console.log(err)
         alert(err.error);
       },
     });

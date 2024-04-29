@@ -1,5 +1,5 @@
 <section class="container-fluid">
-  <ng-container *ngIf="!showAddModal">
+  <ng-container *ngIf="!showAddModal && !showEditModal">
     <button
       mat-mini-fab
       class="success-button"
@@ -14,9 +14,12 @@
         </mat-card-header>
         <mat-card-content>
           <span>{{ task.description }}</span>
-          <span>Date: {{ task.date | date : "dd/MM/YYYY HH:mm" }}</span>
+          <span>Date: {{ task.date | date : "dd/MM/YYYY" }}</span>
         </mat-card-content>
         <mat-card-actions>
+          <button mat-icon-button (click)="openEditModal(task)">
+            <mat-icon>edit</mat-icon>
+          </button>
           <button mat-button color="warn" (click)="removeTask(task)">
             Remove
           </button>
@@ -27,5 +30,13 @@
   <app-addTask
     *ngIf="showAddModal"
     (newTaskEvent)="addTask($event)"
+    (closeEvent)="showAddModal = false"
   ></app-addTask>
+
+  <app-editTask
+    *ngIf="showEditModal"
+    [task]="selectedTask!"
+    (taskUpdatedEvent)="updateTask($event)"
+    (closeEvent)="showEditModal = false"
+  ></app-editTask>
 </section>

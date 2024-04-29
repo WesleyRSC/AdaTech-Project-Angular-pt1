@@ -1,7 +1,19 @@
-.task-cards{
-    display: flex;
-    flex-direction: column;
-    > .card{
-        margin-top: 10px;
+.task-cards {
+  display: flex;
+  flex-direction: column;
+  > .card {
+    margin-top: 10px;
+    > mat-card-content {
+      display: flex;
+      flex-direction: column;
+      > span {
+        margin-top: 5px;
+      }
     }
+  }
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: space-between;
 }
